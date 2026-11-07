@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-<title>Le Labo du Visage – Unité 8, semaine 1</title>
+<title>Le Labo du Visage – Unité 8, partie 1</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&family=Quicksand:wght@500;700&display=swap" rel="stylesheet">
 <style>
@@ -113,7 +113,7 @@ function route(){
  const m=location.hash.replace("#","");
  if(MODES[m]){$("#title").textContent=MODES[m].t;MODES[m].f()}
  else{$("#title").textContent="Le Labo du Visage";
-  app.innerHTML=`<p class="prompt">Choisis un jeu !</p><div class="menu">${Object.entries(MODES).map(([k,v])=>`<div class="tile" onclick="go('${k}')"><span class="ic">${v.ic}</span>${v.t}<small>${v.d}</small></div>`).join("")}</div><p style="text-align:center;font-size:.7em;color:#888;margin-top:20px">Unité 8 · En pleine forme · Semaine 1 · Le visage</p>`}
+  app.innerHTML=`<p class="prompt">Choisis un jeu !</p><div class="menu">${Object.entries(MODES).map(([k,v])=>`<div class="tile" onclick="go('${k}')"><span class="ic">${v.ic}</span>${v.t}<small>${v.d}</small></div>`).join("")}</div><p style="text-align:center;font-size:.7em;color:#888;margin-top:20px">Unité 8 · En pleine forme · Partie 1 · Le visage</p>`}
 }
 window.addEventListener("hashchange",route);
 
