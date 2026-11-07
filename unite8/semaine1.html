@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<title>Le Labo du Visage – Unité 8, semaine 1</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&family=Quicksand:wght@500;700&display=swap" rel="stylesheet">
+<style>
+:root{--or:#ff7a3d;--tq:#2f8f82;--tq2:#35b3a3;--ye:#ffd166;--bg:#fffdf9;--ink:#2d3735;--ok:#2e9d57;--ko:#d64545;--sc:1}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;background:var(--bg);color:var(--ink);font-family:'Quicksand',system-ui,sans-serif;font-size:calc(18px*var(--sc));-webkit-user-select:none;user-select:none}
+body.beamer{--sc:1.35}
+header{display:flex;align-items:center;gap:10px;padding:10px 14px;background:linear-gradient(135deg,var(--tq2),var(--tq));color:#fff;position:sticky;top:0;z-index:5;flex-wrap:wrap}
+header h1{font:700 1.15em 'Fredoka';margin:0;flex:1;min-width:150px}
+header button{font:600 .8em 'Fredoka';border:0;border-radius:999px;padding:7px 14px;background:#fff;color:var(--tq);cursor:pointer}
+main{max-width:980px;margin:0 auto;padding:14px}
+.menu{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:12px}
+.tile{border:4px solid var(--or);border-radius:22px;background:#fff;padding:16px;text-align:center;font:600 1em 'Fredoka';cursor:pointer;box-shadow:0 5px 0 rgba(255,122,61,.2)}
+.tile .ic{font-size:2em;display:block}.tile small{display:block;font:500 .7em 'Quicksand';color:#666;margin-top:4px}
+.card{border:4px solid var(--or);border-radius:24px;padding:16px;background:#fff;box-shadow:0 5px 0 rgba(255,122,61,.18)}
+.prompt{font:600 1.25em 'Fredoka';text-align:center;margin:6px 0 14px;line-height:1.5}
+.prompt .gap{display:inline-block;min-width:3.2em;border-bottom:4px solid var(--or);color:var(--tq);padding:0 6px}
+.opts{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px}
+.opt{font:600 1em 'Fredoka';border:3px solid var(--tq2);border-radius:16px;background:#f2fbf9;padding:12px 8px;cursor:pointer;min-height:56px}
+.opt.good{background:#d9f5e2;border-color:var(--ok)}.opt.bad{background:#fde0e0;border-color:var(--ko)}
+.bar{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;font:600 .85em 'Fredoka';color:var(--tq);gap:8px;flex-wrap:wrap}
+.pill{background:var(--ye);color:#5a4300;border-radius:999px;padding:4px 12px}
+.fb{min-height:2.6em;text-align:center;font:600 1em 'Fredoka';margin-top:10px}
+.fb.good{color:var(--ok)}.fb.bad{color:var(--ko)}
+.btn{font:600 1em 'Fredoka';border:0;border-radius:999px;background:var(--or);color:#fff;padding:10px 22px;cursor:pointer;box-shadow:0 4px 0 rgba(0,0,0,.15)}
+.btn.sec{background:var(--tq)}.center{text-align:center;margin-top:12px}
+.rule{background:#fff8e1;border:2px dashed var(--ye);border-radius:14px;padding:8px 12px;font-size:.8em;margin-bottom:10px}
+.facebox{display:flex;justify-content:center}.facebox svg{width:min(420px,78vw);height:auto}
+.hot{fill:rgba(255,122,61,0);cursor:pointer}.hot:active,.hot.sel{fill:rgba(255,122,61,.4)}
+.big{font:700 1.7em 'Fredoka';text-align:center;min-height:1.5em;color:var(--tq)}
+.chips{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin:8px 0;min-height:52px}
+.chip{font:600 1em 'Fredoka';border:3px solid var(--or);border-radius:12px;background:#fff;padding:8px 12px;cursor:pointer}
+.chip.used{opacity:.25;pointer-events:none}
+.answer{min-height:58px;border:3px dashed var(--tq2);border-radius:16px;padding:8px;display:flex;flex-wrap:wrap;gap:6px;justify-content:center;align-items:center}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(105px,1fr));gap:10px}
+.fc{border:4px solid #e8e0d0;border-radius:18px;padding:6px;text-align:center;background:#fff;cursor:pointer;font:600 .8em 'Fredoka'}
+.fc svg{width:84px;height:84px}.fc.good{border-color:var(--ok);background:#d9f5e2}.fc.bad{border-color:var(--ko);background:#fde0e0}
+.say{background:none;border:0;font-size:1.3em;cursor:pointer;vertical-align:middle}
+.teams{display:none;gap:8px}.beamer .teams{display:flex}
+.team{background:#fff;color:var(--tq);border-radius:999px;padding:3px 10px;font:600 .8em 'Fredoka';display:flex;gap:6px;align-items:center}
+.team button{padding:2px 9px;font-size:1em}
+.end{text-align:center;font:700 1.4em 'Fredoka';padding:20px 0}
+.stars{font-size:2em;color:var(--or)}
+</style>
+</head>
+<body>
+<header>
+  <h1 id="title">Le Labo du Visage</h1>
+  <div class="teams"><div class="team">Équipe A <b id="ta">0</b><button onclick="team('a',1)">+</button><button onclick="team('a',-1)">−</button></div><div class="team">Équipe B <b id="tb">0</b><button onclick="team('b',1)">+</button><button onclick="team('b',-1)">−</button></div></div>
+  <button onclick="toggleBeamer()" id="bbtn">Beamer</button>
+  <button onclick="go('')">☰ Menu</button>
+</header>
+<main id="app"></main>
+
+<script>
+/* ---------- Daten ---------- */
+const HAIR={blonds:"#e8c15a",bruns:"#7a4a24",noirs:"#2a2220",roux:"#c4561f"};
+const EYES={bleus:"#3d82d6",verts:"#3c9a4a",bruns:"#6b3e1b",gris:"#8a98a6"};
+const PEOPLE=[
+ {n:"Lucas",s:"m",h:"bruns",l:"courts",t:"lisses",e:"bleus",k:"#f6d3b0"},{n:"Emma",s:"f",h:"blonds",l:"longs",t:"lisses",e:"verts",k:"#f9dcc0"},
+ {n:"Hugo",s:"m",h:"roux",l:"courts",t:"bouclés",e:"bruns",k:"#f6d3b0"},{n:"Léa",s:"f",h:"noirs",l:"longs",t:"bouclés",e:"bruns",k:"#b9783f"},
+ {n:"Noah",s:"m",h:"blonds",l:"courts",t:"lisses",e:"gris",k:"#f9dcc0"},{n:"Chloé",s:"f",h:"bruns",l:"longs",t:"lisses",e:"verts",k:"#e5b88b"},
+ {n:"Tom",s:"m",h:"noirs",l:"courts",t:"lisses",e:"bruns",k:"#c68642"},{n:"Inès",s:"f",h:"roux",l:"longs",t:"lisses",e:"bleus",k:"#f6d3b0"},
+ {n:"Maël",s:"m",h:"bruns",l:"courts",t:"bouclés",e:"verts",k:"#e5b88b"},{n:"Clara",s:"f",h:"blonds",l:"longs",t:"bouclés",e:"bleus",k:"#f9dcc0"},
+ {n:"Adam",s:"m",h:"noirs",l:"courts",t:"bouclés",e:"gris",k:"#8d5524"},{n:"Nora",s:"f",h:"bruns",l:"courts",t:"lisses",e:"gris",k:"#e5b88b"}];
+const VOC=[["die Stirn","le front"],["die Wange","la joue"],["der Zahn","la dent"],["das Kinn","le menton"],["das Auge","l'œil"],["die Nase","le nez"],["das Ohr","l'oreille"],["der Mund","la bouche"],["die Zunge","la langue"],["der Kopf","la tête"],["das Gesicht","le visage"],["die Haare","les cheveux"],["die Augen","les yeux"],["die Zähne","les dents"],["die Ohren","les oreilles"],["blonde Haare","des cheveux blonds"],["rote Haare","des cheveux roux"],["lockige Haare","des cheveux bouclés"],["lange Haare","des cheveux longs"],["graue Augen","les yeux gris"]];
+const AVOIR={je:"ai",tu:"as",il:"a",elle:"a",nous:"avons",vous:"avez",ils:"ont",elles:"ont"};
+const ETRE={je:"suis",tu:"es",il:"est",elle:"est",nous:"sommes",vous:"êtes",ils:"sont",elles:"sont"};
+const AV_ITEMS=[["J'","je","les yeux bleus"],["Tu","tu","des cheveux bruns"],["Emma","elle","des cheveux blonds"],["Nous","nous","les yeux verts"],["Vous","vous","des cheveux bouclés"],["Hugo et Léa","ils","les yeux bruns"],["Noah","il","les yeux gris"],["Inès","elle","des cheveux longs"],["Tom et Maël","ils","des cheveux courts"],["Clara et moi","nous","des cheveux bouclés"],["Adam","il","les yeux gris"],["Chloé et Nora","elles","les yeux verts"]];
+const ET_ITEMS=[["Mes cheveux","il","noirs"],["Ma langue","il","rose"],["Les yeux de Léa","ils","bruns"],["Je","je","blond"],["Tu","tu","roux"],["Nous","nous","bruns"],["Vous","vous","blonds"],["Emma","elle","blonde"],["Hugo et Tom","ils","bruns"],["Les dents de Noah","elles","blanches"],["La bouche de Clara","elle","rouge"],["Chloé et Nora","elles","brunes"]];
+const ADJ=[["le nez","rouge","rouge"],["la bouche","rouge","rouge"],["les dents","blanc","blanches"],["la langue","rose","rose"],["les joues","rose","roses"],["les cheveux","noir","noirs"],["les yeux","vert","verts"],["la tête","bleu","bleue"],["les oreilles","jaune","jaunes"],["les cheveux","bouclé","bouclés"],["la dent","blanc","blanche"],["les yeux","gris","gris"],["les cheveux","roux","roux"],["la bouche","orange","orange"]];
+const AB_CONTRAST=[["Emma ___ des cheveux longs.","a"],["Les cheveux d'Emma ___ blonds.","sont"],["Hugo ___ les yeux bruns.","a"],["Les yeux de Hugo ___ bruns.","sont"],["Léa et Tom ___ des cheveux noirs.","ont"],["Les cheveux de Léa et Tom ___ noirs.","sont"],["Nous ___ des cheveux bouclés.","avons"],["La langue de Noah ___ rose.","est"],["Tu ___ les yeux verts.","as"],["Les yeux de Chloé ___ verts.","sont"],["J'___ les yeux bleus.","ai"],["Le nez de Tom ___ rouge.","est"]];
+
+/* ---------- Hilfsfunktionen ---------- */
+const $=s=>document.querySelector(s), app=$("#app");
+const shuffle=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
+const pick=(a,n)=>shuffle(a).slice(0,n);
+const esc=s=>String(s).replace(/[&<>]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;"}[c]));
+function say(t){try{speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(t.replace(/___/g,"…"));u.lang="fr-FR";u.rate=.85;speechSynthesis.speak(u)}catch(e){}}
+window.say=say;
+function hairPhrase(p){return `des cheveux ${p.h}, ${p.l} et ${p.t}`}
+function descr(p){return `${p.n} a ${hairPhrase(p)}. ${p.s=="m"?"Il":"Elle"} a les yeux ${p.e}.`}
+function faceSvg(p,size){
+ const hc=HAIR[p.h],ec=EYES[p.e];let back="";
+ if(p.l==="longs")back+=`<rect x="14" y="30" width="72" height="62" rx="26" fill="${hc}"/>`;
+ if(p.t==="bouclés"){const pts=[[22,38],[30,24],[44,18],[58,18],[72,24],[80,38],[18,52],[84,52]];if(p.l==="longs")pts.push([16,70],[86,70],[18,86],[84,86]);pts.forEach(([x,y])=>back+=`<circle cx="${x}" cy="${y}" r="12" fill="${hc}"/>`)}
+ const fr=p.t==="bouclés"?`<circle cx="34" cy="34" r="9" fill="${hc}"/><circle cx="50" cy="30" r="10" fill="${hc}"/><circle cx="66" cy="34" r="9" fill="${hc}"/>`:`<path d="M22 44 Q24 20 50 20 Q76 20 78 44 Q64 30 50 34 Q36 30 22 44Z" fill="${hc}"/>`;
+ return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" ${size?`width="${size}" height="${size}"`:""}>${back}<ellipse cx="50" cy="55" rx="29" ry="32" fill="${p.k}"/><ellipse cx="21" cy="57" rx="5" ry="8" fill="${p.k}"/><ellipse cx="79" cy="57" rx="5" ry="8" fill="${p.k}"/>${fr}<ellipse cx="39" cy="55" rx="7" ry="6" fill="#fff"/><ellipse cx="61" cy="55" rx="7" ry="6" fill="#fff"/><circle cx="39" cy="55" r="3.8" fill="${ec}"/><circle cx="61" cy="55" r="3.8" fill="${ec}"/><circle cx="39" cy="55" r="1.6" fill="#111"/><circle cx="61" cy="55" r="1.6" fill="#111"/><path d="M50 58 L47 68 L53 68" stroke="#b0764a" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M40 76 Q50 84 60 76" stroke="#c0392b" stroke-width="3" fill="none" stroke-linecap="round"/><circle cx="30" cy="68" r="4.5" fill="#ff8a8a" opacity=".35"/><circle cx="70" cy="68" r="4.5" fill="#ff8a8a" opacity=".35"/>__HOT__</svg>`}
+
+/* Teams (Beamer) */
+const T={a:0,b:0};
+function team(k,d){T[k]=Math.max(0,T[k]+d);$("#t"+k).textContent=T[k]}
+function toggleBeamer(){document.body.classList.toggle("beamer");$("#bbtn").textContent=document.body.classList.contains("beamer")?"iPad":"Beamer"}
+
+/* ---------- Menü & Routing ---------- */
+const MODES={
+ visage:{t:"Le visage cliquable",ic:"🙂",d:"Touche, écoute, joue",f:visage},
+ vocab:{t:"Vocab-Trainer",ic:"📚",d:"Deutsch → Français",f:vocab},
+ avoir:{t:"Le verbe avoir",ic:"🅰️",d:"j'ai, tu as, il a…",f:()=>conj("avoir")},
+ etre:{t:"Le verbe être",ic:"🅱️",d:"je suis, tu es… + avoir ou être ?",f:()=>conj("etre")},
+ adjectifs:{t:"Adjectifs-Détective",ic:"🔍",d:"blond, blonde, blonds…",f:adjectifs},
+ phrases:{t:"Remets dans l'ordre",ic:"🧩",d:"Construis la phrase",f:phrases},
+ quiestce:{t:"Qui est-ce ?",ic:"🕵️",d:"Lis la description, trouve l'enfant",f:quiestce}};
+function go(m){location.hash=m;route()}
+function route(){
+ try{speechSynthesis.cancel()}catch(e){}
+ const m=location.hash.replace("#","");
+ if(MODES[m]){$("#title").textContent=MODES[m].t;MODES[m].f()}
+ else{$("#title").textContent="Le Labo du Visage";
+  app.innerHTML=`<p class="prompt">Choisis un jeu !</p><div class="menu">${Object.entries(MODES).map(([k,v])=>`<div class="tile" onclick="go('${k}')"><span class="ic">${v.ic}</span>${v.t}<small>${v.d}</small></div>`).join("")}</div><p style="text-align:center;font-size:.7em;color:#888;margin-top:20px">Unité 8 · En pleine forme · Semaine 1 · Le visage</p>`}
+}
+window.addEventListener("hashchange",route);
+
+/* ---------- Quiz-Engine ---------- */
+function quiz({ruleHtml="",rounds,onSpeak}){
+ let i=0,score=0,locked=false;
+ function show(){
+  if(i>=rounds.length){const st=score>=rounds.length*.9?3:score>=rounds.length*.6?2:1;
+   app.innerHTML=`<div class="card"><div class="end">${score} / ${rounds.length}<div class="stars">${"★".repeat(st)}${"☆".repeat(3-st)}</div></div><div class="center"><button class="btn" id="again">Rejouer</button> <button class="btn sec" onclick="go('')">Menu</button></div></div>`;
+   $("#again").onclick=()=>{i=0;score=0;rounds=shuffle(rounds);show()};return}
+  const r=rounds[i];locked=false;
+  app.innerHTML=`<div class="card"><div class="bar"><span>Question ${i+1} / ${rounds.length}</span><span class="pill">★ ${score}</span></div>${ruleHtml}<div class="prompt">${r.prompt}</div><div class="opts">${shuffle(r.options).map(o=>`<button class="opt" data-o="${esc(o)}">${esc(o)}</button>`).join("")}</div><div class="fb" id="fb"></div></div>`;
+  app.querySelectorAll(".opt").forEach(b=>b.onclick=()=>{
+   if(locked)return;const ok=b.dataset.o===r.answer;
+   if(ok){locked=true;b.classList.add("good");score++;$("#fb").className="fb good";$("#fb").textContent="Bravo ! "+(r.full||r.answer);say(r.say||r.full||r.answer);setTimeout(()=>{i++;show()},1700)}
+   else{b.classList.add("bad");$("#fb").className="fb bad";$("#fb").textContent="Pas tout à fait… essaie encore !";score=Math.max(0,score-0)}
+  });
+  if(r.speakFirst)say(r.speakFirst);
+ }
+ show();
+}
+
+/* ---------- Modus 1: Le visage cliquable ---------- */
+const PARTS=[["le visage",'<ellipse class="hot" cx="50" cy="56" rx="29" ry="32"/>'],["les cheveux",'<path class="hot" d="M20 46 Q22 14 50 14 Q78 14 80 46 Q66 36 50 36 Q34 36 20 46Z"/>'],["les oreilles",'<ellipse class="hot" cx="20" cy="57" rx="7" ry="10"/><ellipse class="hot" cx="80" cy="57" rx="7" ry="10"/>'],["le front",'<ellipse class="hot" cx="50" cy="42" rx="13" ry="5"/>'],["les yeux",'<ellipse class="hot" cx="39" cy="55" rx="9" ry="7"/><ellipse class="hot" cx="61" cy="55" rx="9" ry="7"/>'],["le nez",'<ellipse class="hot" cx="50" cy="65" rx="6" ry="8"/>'],["les joues",'<circle class="hot" cx="29" cy="69" r="7"/><circle class="hot" cx="71" cy="69" r="7"/>'],["la bouche",'<ellipse class="hot" cx="50" cy="77" rx="11" ry="6"/>'],["le menton",'<ellipse class="hot" cx="50" cy="89" rx="9" ry="5"/>']];
+function visage(){
+ let mode="explore",target=null,score=0,n=0;
+ const p=PEOPLE[1];
+ const hot=PARTS.map(([name,sh])=>`<g data-p="${name}">${sh}</g>`).join("");
+ function draw(){
+  app.innerHTML=`<div class="card"><div class="bar"><span>${mode=="explore"?"Touche une partie du visage":"Touche : <b>"+target+"</b>"}</span><span class="pill">★ ${score}</span></div><div class="facebox">${faceSvg(p).replace("__HOT__",hot)}</div><div class="big" id="lab">&nbsp;</div><div class="fb" id="fb"></div><div class="center"><button class="btn sec" id="m1">Explorer</button> <button class="btn" id="m2">Jeu : touche…</button></div></div>`;
+  app.querySelectorAll("g[data-p]").forEach(g=>g.onclick=()=>hit(g.dataset.p,g));
+  $("#m1").onclick=()=>{mode="explore";score=0;draw()};
+  $("#m2").onclick=()=>{mode="quiz";score=0;n=0;next()};
+ }
+ function hit(name,g){
+  if(mode=="explore"){$("#lab").textContent=name;say(name);return}
+  if(name===target){$("#fb").className="fb good";$("#fb").textContent="Bravo ! "+name;say(name);score++;n++;setTimeout(()=>n>=10?end():next(),1200)}
+  else{$("#fb").className="fb bad";$("#fb").textContent="Ça, c'est "+name+". Cherche "+target+" !";say(name)}
+ }
+ function next(){target=pick(PARTS.map(x=>x[0]).filter(x=>x!==target),1)[0];draw();say("Touche "+target)}
+ function end(){app.innerHTML=`<div class="card"><div class="end">${score} / 10<div class="stars">${"★".repeat(score>=9?3:score>=6?2:1)}</div></div><div class="center"><button class="btn" onclick="route()">Rejouer</button></div></div>`}
+ draw();
+}
+
+/* ---------- Modus 2: Vocab ---------- */
+function vocab(){
+ app.innerHTML=`<div class="card"><p class="prompt">Choisis la direction</p><div class="center"><button class="btn" id="d1">Deutsch → Français</button></div><div class="center"><button class="btn sec" id="d2">Français → Deutsch</button></div></div>`;
+ const start=dir=>{
+  const items=pick(VOC,10);
+  quiz({rounds:items.map(([de,fr])=>{
+   const wrong=pick(VOC.filter(x=>x[1]!==fr),3);
+   return dir==1?{prompt:`<b>${de}</b>`,options:[fr,...wrong.map(x=>x[1])],answer:fr,full:fr,say:fr}
+                :{prompt:`<b>${fr}</b> <button class="say" onclick="say('${fr.replace(/'/g,"\\'")}')">🔊</button>`,options:[de,...wrong.map(x=>x[0])],answer:de,full:`${fr} = ${de}`,say:fr,speakFirst:fr};
+  })});
+ };
+ $("#d1").onclick=()=>start(1);$("#d2").onclick=()=>start(2);
+}
+
+/* ---------- Modus 3/4: avoir / être ---------- */
+function conj(which){
+ const isA=which==="avoir",F=isA?AVOIR:ETRE,items=isA?AV_ITEMS:ET_ITEMS;
+ const verb=isA?"avoir":"être";
+ const rule=`<div class="rule"><b>${verb}</b> : ${isA?"j'ai · tu as · il/elle a · nous avons · vous avez · ils/elles ont":"je suis · tu es · il/elle est · nous sommes · vous êtes · ils/elles sont"}</div>`;
+ const opts=isA?["ai","as","a","avons","avez","ont"]:["suis","es","est","sommes","êtes","sont"];
+ const rounds=pick(items,10).map(([subj,pr,rest])=>{const a=F[pr];const sentence=isA?`${subj}${subj.endsWith("'")?"":" "}${a} ${rest}.`:`${subj} ${a} ${rest}.`;
+  return {prompt:isA?`${esc(subj)}${subj.endsWith("'")?"":" "}<span class="gap">&nbsp;&nbsp;?&nbsp;&nbsp;</span> ${esc(rest)}.`:`${esc(subj)} <span class="gap">&nbsp;&nbsp;?&nbsp;&nbsp;</span> ${esc(rest)}.`,options:opts,answer:a,full:sentence,say:sentence}});
+ if(!isA){ /* Zusatzrunden: avoir ou être ? */
+  const extra=pick(AB_CONTRAST,5).map(([s,a])=>({prompt:esc(s).replace("___",'<span class="gap">&nbsp;&nbsp;?&nbsp;&nbsp;</span>'),options:["a","as","ai","avons","ont","est","sont"],answer:a,full:s.replace("___",a),say:s.replace("___",a)}));
+  rounds.splice(5,5,...extra);
+ }
+ quiz({ruleHtml:rule,rounds});
+}
+
+/* ---------- Modus 5: Adjektive ---------- */
+function adjectifs(){
+ const rule=`<div class="rule">masculin <b>bleu</b> · féminin <b>bleue</b> · pluriel <b>bleus / bleues</b><br>rouge, rose, jaune : pas de -e en plus · blanc → blanche · gris, roux : pas de -s</div>`;
+ const rounds=pick(ADJ,10).map(([gn,adj,good])=>{
+  const base=adj,forms=[...new Set([base,base+"e",base+"s",base+"es",good])];
+  const wrong=pick(forms.filter(x=>x!==good),3);while(wrong.length<3)wrong.push(base+"x"+wrong.length);
+  return {prompt:`${esc(gn)} <span class="gap">&nbsp;?&nbsp;</span> <small>(${esc(adj)})</small>`,options:[good,...wrong.slice(0,3)],answer:good,full:`${gn} ${good}`,say:`${gn} ${good}`};
+ });
+ quiz({ruleHtml:rule,rounds});
+}
+
+/* ---------- Modus 6: Phrases ---------- */
+function phrases(){
+ const sents=pick(PEOPLE,6).map(p=>`${p.n} a ${hairPhrase(p)}.`).concat(pick(PEOPLE,3).map(p=>`Les cheveux de ${p.n} sont ${p.h}, ${p.l} et ${p.t}.`),["Est-ce que tu as les yeux bleus ?"]);
+ let i=0,score=0,order=shuffle(sents);
+ function show(){
+  if(i>=order.length){app.innerHTML=`<div class="card"><div class="end">${score} / ${order.length}<div class="stars">${"★".repeat(score>=9?3:score>=6?2:1)}</div></div><div class="center"><button class="btn" onclick="route()">Rejouer</button></div></div>`;return}
+  const s=order[i],words=s.split(" ");let chosen=[];
+  let sh=shuffle(words.map((w,k)=>({w,k})));if(sh.map(x=>x.w).join(" ")===s)sh.reverse();
+  const render=()=>{
+   app.innerHTML=`<div class="card"><div class="bar"><span>Phrase ${i+1} / ${order.length}</span><span class="pill">★ ${score}</span></div><div class="prompt">Remets les mots dans l'ordre</div><div class="answer" id="ans">${chosen.map(c=>`<span class="chip" data-k="${c.k}" data-a="1">${esc(c.w)}</span>`).join("")}</div><div class="chips" id="pool">${sh.map(c=>`<span class="chip ${chosen.some(x=>x.k===c.k)?"used":""}" data-k="${c.k}">${esc(c.w)}</span>`).join("")}</div><div class="fb" id="fb"></div><div class="center"><button class="btn sec" id="clr">Effacer</button> <button class="btn" id="chk">Vérifier</button></div></div>`;
+   $("#pool").querySelectorAll(".chip").forEach(c=>c.onclick=()=>{chosen.push(sh.find(x=>x.k==c.dataset.k));render()});
+   $("#ans").querySelectorAll(".chip").forEach(c=>c.onclick=()=>{chosen=chosen.filter(x=>x.k!=c.dataset.k);render()});
+   $("#clr").onclick=()=>{chosen=[];render()};
+   $("#chk").onclick=()=>{const t=chosen.map(c=>c.w).join(" ");
+    if(t===s){$("#fb").className="fb good";$("#fb").textContent="Bravo ! "+s;say(s);score++;setTimeout(()=>{i++;show()},1900)}
+    else{$("#fb").className="fb bad";$("#fb").textContent=chosen.length<words.length?"Il manque des mots.":"Pas tout à fait… regarde encore !"}};
+  };
+  render();
+ }
+ show();
+}
+
+/* ---------- Modus 7: Qui est-ce ? ---------- */
+function quiestce(){
+ app.innerHTML=`<div class="card"><p class="prompt">Niveau ?</p><div class="center"><button class="btn sec" id="l1">Facile (6 enfants)</button></div><div class="center"><button class="btn" id="l2">Normal (12 enfants)</button></div></div>`;
+ const start=lvl=>{
+  let round=0,score=0;const pool=lvl==1?pick(PEOPLE,6):PEOPLE;
+  const targets=pick(pool,Math.min(8,pool.length));
+  function show(){
+   if(round>=targets.length){app.innerHTML=`<div class="card"><div class="end">${score} / ${targets.length}<div class="stars">${"★".repeat(score>=7?3:score>=5?2:1)}</div></div><div class="center"><button class="btn" onclick="route()">Rejouer</button></div></div>`;return}
+   const t=targets[round],d=descr(t);let done=false;
+   app.innerHTML=`<div class="card"><div class="bar"><span>Question ${round+1} / ${targets.length}</span><span class="pill">★ ${score}</span></div><div class="prompt">${esc(d)} <button class="say" onclick="say('${d.replace(/'/g,"\\'")}')">🔊</button></div><div class="grid">${pool.map(p=>`<div class="fc" data-n="${p.n}">${faceSvg(p,84).replace("__HOT__","")}<br>${p.n}</div>`).join("")}</div><div class="fb" id="fb"></div></div>`;
+   app.querySelectorAll(".fc").forEach(c=>c.onclick=()=>{if(done)return;
+    if(c.dataset.n===t.n){done=true;c.classList.add("good");$("#fb").className="fb good";$("#fb").textContent="Bravo ! C'est "+t.n+".";say(d);score++;setTimeout(()=>{round++;show()},1800)}
+    else{c.classList.add("bad");$("#fb").className="fb bad";$("#fb").textContent="Non, ce n'est pas "+c.dataset.n+". Relis la description !"}});
+   say(d);
+  }
+  show();
+ };
+ $("#l1").onclick=()=>start(1);$("#l2").onclick=()=>start(2);
+}
+route();
+</script>
+</body>
+</html>
