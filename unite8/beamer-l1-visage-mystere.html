@@ -72,7 +72,7 @@ function col(w){return '<span class="'+cls(w)+'">'+w+'</span>'}
 const MOUTH='<ellipse cx="50" cy="52" rx="34" ry="24" fill="#7a1f1f"/>';
 const CARDS=[
  {w:"le front",ring:'<ellipse cx="50" cy="41" rx="16" ry="6.5"/>',vb:"32 24 36 36"},{w:"la joue",ring:'<circle cx="29" cy="69" r="8.5"/>',vb:"12 52 34 34"},{w:"la dent",mouth:"dent"},
- {w:"le menton",ring:'<ellipse cx="50" cy="89" rx="11" ry="6.5"/>',vb:"32 68 36 36"},{w:"l'œil",ring:'<ellipse cx="39" cy="55" rx="10" ry="8"/><ellipse cx="61" cy="55" rx="10" ry="8"/>',w2:"les yeux",vb:"26 32 48 48"},{w:"le nez",ring:'<ellipse cx="50" cy="64" rx="8" ry="10"/>',vb:"34 46 32 32"},
+ {w:"le menton",ring:'<ellipse cx="50" cy="83.2" rx="10" ry="3.6"/>',vb:"32 66 36 36"},{w:"l'œil",ring:'<ellipse cx="39" cy="55" rx="10" ry="8"/><ellipse cx="61" cy="55" rx="10" ry="8"/>',w2:"les yeux",vb:"26 32 48 48"},{w:"le nez",ring:'<ellipse cx="50" cy="64" rx="8" ry="10"/>',vb:"34 46 32 32"},
  {w:"l'oreille",ring:'<ellipse cx="20" cy="57" rx="8" ry="11"/>',w2:"les oreilles",vb:"2 40 36 36"},{w:"la bouche",ring:'<ellipse cx="50" cy="77" rx="13" ry="7.5"/>',vb:"32 60 36 36"},{w:"la langue",mouth:"langue"},
  {w:"la tête",vb:"4 6 92 92"},{w:"le visage",vb:"16 18 68 68"},{w:"les cheveux",vb:"8 6 84 84"}];
 function mouthPic(kind){
@@ -92,7 +92,7 @@ const STEPS=[
  {w:"l'œil",w2:"les yeux",holes:['<ellipse cx="39" cy="55" rx="10" ry="8"/>','<ellipse cx="61" cy="55" rx="10" ry="8"/>']},
  {w:"le front",holes:['<ellipse cx="50" cy="41" rx="16" ry="6"/>']},
  {w:"la joue",w2:"les joues",holes:['<circle cx="29" cy="69" r="8"/>','<circle cx="71" cy="69" r="8"/>']},
- {w:"le menton",holes:['<ellipse cx="50" cy="89" rx="11" ry="6"/>']},
+ {w:"le menton",holes:['<ellipse cx="50" cy="82" rx="11" ry="4.3"/>']},
  {w:"les cheveux",holes:['<path d="M10 52 Q10 14 50 12 Q90 14 90 52 L92 96 L8 96Z"/>']},
  {w:"le visage",holes:['<rect x="0" y="0" width="100" height="100"/>']}];
 let mode="m",pi=1,step=-1,stage=0,ci=0,view="one";
@@ -104,7 +104,7 @@ function setTab(t){mode=t;["m","c","e"].forEach(k=>document.getElementById("t"+k
 function holesFor(n){const it=ORDER.slice(0,n+1);const hair=it.find(x=>x.w==="les cheveux");const oth=it.filter(x=>x!==hair).map(x=>x.holes.join("")).join("");return (hair?hair.holes.join("")+'</g><g fill="#fff"><ellipse cx="50" cy="63" rx="30" ry="30"/></g><g fill="#000">':"")+oth}
 function drawM(){
  const p=PEOPLE[pi];const s=ORDER[step];
- const paper=step>=STEPS.length-1?"":'<svg viewBox="0 0 100 100"><defs><mask id="mk"><rect width="100" height="100" fill="#fff"/><g fill="#000">'+(step>=0?holesFor(step):"")+'</g></mask></defs><rect width="100" height="100" fill="#ead9b4" mask="url(#mk)"/><text x="50" y="62" text-anchor="middle" font-size="44" fill="#b79a5e" font-weight="700" mask="url(#mk)">?</text></svg>';
+ const paper=step>=STEPS.length-1?"":'<svg viewBox="0 0 100 100"><defs><mask id="mk"><rect width="100" height="100" fill="#fff"/><g fill="#000">'+(step>=0?holesFor(step):"")+'</g></mask></defs><rect width="100" height="100" fill="#ead9b4" mask="url(#mk)"/></svg>';
  let q,wd="";
  if(step<0){q="Qu'est-ce que c'est ? Je découvre petit à petit …"}
  else if(step===STEPS.length-1&&stage===1){q="C'est "+p.name+" !";wd=col(s.w)}
