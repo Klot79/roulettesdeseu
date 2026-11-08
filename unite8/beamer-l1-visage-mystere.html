@@ -1,0 +1,135 @@
+<!DOCTYPE html><html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Le visage mystère – Beamer L1</title>
+<style>
+:root{--or:#d9692a;--le:#2f6fd0;--la:#d94a4a;--les:#3a9d5d;--lx:#d9a400;--ink:#2b2b2b}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%;font-family:'Nunito','Baloo 2',system-ui,sans-serif;background:#fffaf3;color:var(--ink);user-select:none;-webkit-user-select:none}
+header{display:flex;align-items:center;gap:10px;padding:8px 16px;background:linear-gradient(135deg,#3a63b8,#a8234f);color:#fff}
+header h1{margin:0;font:700 22px 'Baloo 2',system-ui;flex:1}
+header button{font:700 16px system-ui;border:0;border-radius:999px;padding:8px 18px;background:#fff;color:#a8234f;cursor:pointer}
+header button.on{background:#ffd54a;color:#4a3500}
+main{height:calc(100% - 52px);display:flex;gap:2vw;padding:1.5vh 2vw}
+.stage{flex:0 0 min(62vh,48vw);display:flex;align-items:center;justify-content:center}
+.facewrap{position:relative;width:min(62vh,48vw);height:min(62vh,48vw);border:6px solid var(--or);border-radius:28px;background:#fff;overflow:hidden;box-shadow:0 8px 0 rgba(217,105,42,.2)}
+.facewrap svg{position:absolute;inset:0;width:100%;height:100%}
+.side{flex:1;display:flex;flex-direction:column;justify-content:center;gap:2vh;min-width:0}
+.q{font:700 clamp(28px,4.4vh,54px) 'Baloo 2',system-ui;color:#555;min-height:1.3em}
+.word{font:700 clamp(54px,11vh,130px) 'Baloo 2',system-ui;line-height:1.05;min-height:1.1em}
+.word small{display:block;font-size:.4em;color:#777;font-weight:600}
+.le{color:var(--le)}.la{color:var(--la)}.les{color:var(--les)}.lx{color:var(--lx)}
+.btns{display:flex;gap:12px;flex-wrap:wrap}
+.btn{font:700 clamp(18px,2.6vh,28px) 'Baloo 2',system-ui;border:0;border-radius:999px;padding:1.2vh 2.4vw;background:var(--or);color:#fff;cursor:pointer;box-shadow:0 5px 0 rgba(0,0,0,.15)}
+.btn.sec{background:#3a63b8}.btn.gr{background:#6d8f3f}.btn.gy{background:#999}
+.dots{display:flex;gap:8px;flex-wrap:wrap}.dot{width:3.2vh;height:3.2vh;border-radius:50%;background:#e7d9c8}.dot.on{background:var(--or)}
+.hint{font:600 clamp(14px,2vh,20px) system-ui;color:#888}
+.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1.6vh 1.2vw;width:100%;align-content:center}
+.card{border:5px solid var(--or);border-radius:20px;background:#fff;padding:.8vh .6vw 1vh;text-align:center;cursor:pointer}
+.card svg{width:100%;height:auto;max-height:17vh;display:block}
+.card .w{font:700 clamp(20px,3.6vh,40px) 'Baloo 2',system-ui}
+.big{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1vh;min-width:0}
+.bigpic{border:6px solid var(--or);border-radius:28px;background:#fff;width:min(56vh,46vw);height:min(56vh,46vw);padding:1vh}
+.bigpic svg{width:100%;height:100%}
+.bigw{font:700 clamp(54px,11vh,130px) 'Baloo 2',system-ui;line-height:1}
+.bigw small{display:block;font-size:.35em;color:#777;text-align:center;font-weight:600}
+.ctr{display:flex;flex-direction:column;align-items:center;gap:1.4vh;width:100%}
+.hidden{display:none}
+</style></head><body>
+<header><h1>Le visage mystère · Beamer L1</h1><button id="tm" class="on">Visage mystère</button><button id="tc">Bildkarten</button><button id="te">Echo-Sprechen</button></header>
+<main id="app"></main>
+<script>
+const PEOPLE=[{"name":"Lucas","sex":"m","hair":"bruns","len":"courts","tex":"lisses","eyes":"bleus","skin":"#f6d3b0"},{"name":"Emma","sex":"f","hair":"blonds","len":"longs","tex":"lisses","eyes":"verts","skin":"#f9dcc0"},{"name":"Hugo","sex":"m","hair":"roux","len":"courts","tex":"bouclés","eyes":"bruns","skin":"#f6d3b0"},{"name":"Léa","sex":"f","hair":"noirs","len":"longs","tex":"bouclés","eyes":"bruns","skin":"#b9783f"},{"name":"Noah","sex":"m","hair":"blonds","len":"courts","tex":"lisses","eyes":"gris","skin":"#f9dcc0"},{"name":"Chloé","sex":"f","hair":"bruns","len":"longs","tex":"lisses","eyes":"verts","skin":"#e5b88b"},{"name":"Tom","sex":"m","hair":"noirs","len":"courts","tex":"lisses","eyes":"bruns","skin":"#c68642"},{"name":"Inès","sex":"f","hair":"roux","len":"longs","tex":"lisses","eyes":"bleus","skin":"#f6d3b0"},{"name":"Maël","sex":"m","hair":"bruns","len":"courts","tex":"bouclés","eyes":"verts","skin":"#e5b88b"},{"name":"Clara","sex":"f","hair":"blonds","len":"longs","tex":"bouclés","eyes":"bleus","skin":"#f9dcc0"},{"name":"Adam","sex":"m","hair":"noirs","len":"courts","tex":"bouclés","eyes":"gris","skin":"#8d5524"},{"name":"Nora","sex":"f","hair":"bruns","len":"courts","tex":"lisses","eyes":"gris","skin":"#e5b88b"}],HAIR={"blonds":"#e8c15a","bruns":"#7a4a24","noirs":"#2a2220","roux":"#c4561f","gris":"#9a9a9a"},EYES={"bleus":"#3d82d6","verts":"#3c9a4a","bruns":"#6b3e1b","gris":"#8a98a6"};
+function faceSvg(p,vb,extra){
+ const hc=HAIR[p.hair],ec=EYES[p.eyes];let back="";
+ if(p.len==="longs")back+='<rect x="14" y="30" width="72" height="62" rx="26" fill="'+hc+'"/>';
+ if(p.tex==="bouclés"){const pts=[[22,38],[30,24],[44,18],[58,18],[72,24],[80,38],[18,52],[84,52]];if(p.len==="longs")pts.push([16,70],[86,70],[18,86],[84,86]);pts.forEach(([x,y])=>back+='<circle cx="'+x+'" cy="'+y+'" r="12" fill="'+hc+'"/>')}
+ const fr=p.tex==="bouclés"?'<circle cx="34" cy="34" r="9" fill="'+hc+'"/><circle cx="50" cy="30" r="10" fill="'+hc+'"/><circle cx="66" cy="34" r="9" fill="'+hc+'"/>':'<path d="M22 44 Q24 20 50 20 Q76 20 78 44 Q64 30 50 34 Q36 30 22 44Z" fill="'+hc+'"/>';
+ return '<svg xmlns="http://www.w3.org/2000/svg" viewBox="'+(vb||"0 0 100 100")+'">'+back+'<ellipse cx="50" cy="55" rx="29" ry="32" fill="'+p.skin+'"/><ellipse cx="21" cy="57" rx="5" ry="8" fill="'+p.skin+'"/><ellipse cx="79" cy="57" rx="5" ry="8" fill="'+p.skin+'"/>'+fr+'<ellipse cx="39" cy="55" rx="7" ry="6" fill="#fff"/><ellipse cx="61" cy="55" rx="7" ry="6" fill="#fff"/><circle cx="39" cy="55" r="3.8" fill="'+ec+'"/><circle cx="61" cy="55" r="3.8" fill="'+ec+'"/><circle cx="39" cy="55" r="1.6" fill="#111"/><circle cx="61" cy="55" r="1.6" fill="#111"/><path d="M50 58 L47 68 L53 68" stroke="#b0764a" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M40 76 Q50 84 60 76" stroke="#c0392b" stroke-width="3" fill="none" stroke-linecap="round"/><circle cx="30" cy="68" r="4.5" fill="#ff8a8a" opacity="0.35"/><circle cx="70" cy="68" r="4.5" fill="#ff8a8a" opacity="0.35"/>'+(extra||"")+'</svg>';
+}
+function say(t,vol,rate){try{speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(t);u.lang="fr-FR";u.rate=rate||.8;u.volume=vol==null?1:vol;speechSynthesis.speak(u)}catch(e){}}
+function cls(w){return /^(le |l')/.test(w)?(/^l'/.test(w)?"lx":"le"):/^la /.test(w)?"la":"les"}
+function col(w){return '<span class="'+cls(w)+'">'+w+'</span>'}
+/* Bildkarten: Wort, viewBox-Ausschnitt, Spezial */
+const MOUTH='<ellipse cx="50" cy="52" rx="34" ry="24" fill="#7a1f1f"/>';
+const CARDS=[
+ {w:"le front",ring:'<ellipse cx="50" cy="41" rx="16" ry="6.5"/>',vb:"32 24 36 36"},{w:"la joue",ring:'<circle cx="29" cy="69" r="8.5"/>',vb:"12 52 34 34"},{w:"la dent",mouth:"dent"},
+ {w:"le menton",ring:'<ellipse cx="50" cy="89" rx="11" ry="6.5"/>',vb:"32 68 36 36"},{w:"l'œil",ring:'<ellipse cx="39" cy="55" rx="10" ry="8"/><ellipse cx="61" cy="55" rx="10" ry="8"/>',w2:"les yeux",vb:"26 32 48 48"},{w:"le nez",ring:'<ellipse cx="50" cy="64" rx="8" ry="10"/>',vb:"34 46 32 32"},
+ {w:"l'oreille",ring:'<ellipse cx="20" cy="57" rx="8" ry="11"/>',w2:"les oreilles",vb:"2 40 36 36"},{w:"la bouche",ring:'<ellipse cx="50" cy="77" rx="13" ry="7.5"/>',vb:"32 60 36 36"},{w:"la langue",mouth:"langue"},
+ {w:"la tête",vb:"4 6 92 92"},{w:"le visage",vb:"16 18 68 68"},{w:"les cheveux",vb:"8 6 84 84"}];
+function mouthPic(kind){
+ const teeth=[0,1,2,3,4,5].map(i=>'<rect x="'+(24+i*8.6)+'" y="32" width="8" height="14" rx="3" fill="#fff" stroke="#ddd" stroke-width=".6"/>').join("");
+ const low=[0,1,2,3,4].map(i=>'<rect x="'+(28+i*8.6)+'" y="58" width="8" height="12" rx="3" fill="#fff" stroke="#ddd" stroke-width=".6"/>').join("");
+ const tongue='<path d="M34 64 Q50 98 66 64 Q50 56 34 64Z" fill="#e8607a" stroke="#c0405a" stroke-width="1"/><path d="M50 62 L50 82" stroke="#c0405a" stroke-width="1.2"/>';
+ const lips='<path d="M16 52 Q50 14 84 52 Q50 92 16 52Z" fill="none" stroke="#c0392b" stroke-width="5" stroke-linejoin="round"/>';
+ const arrow=kind==="dent"?'<path d="M70 16 L58 30" stroke="#d9692a" stroke-width="3" stroke-linecap="round"/><path d="M58 30 L63 26 M58 30 L59 23" stroke="#d9692a" stroke-width="3" stroke-linecap="round"/>':'';
+ return '<svg viewBox="0 0 100 100"><ellipse cx="50" cy="52" rx="42" ry="34" fill="#f9dcc0"/><path d="M18 52 Q50 20 82 52 Q50 86 18 52Z" fill="#7a1f1f"/>'+teeth+(kind==="langue"?tongue:low)+lips+arrow+'</svg>';
+}
+function pic(c){return c.mouth?mouthPic(c.mouth):faceSvg(PEOPLE[1],c.vb,c.ring?'<g fill="none" stroke="#d9692a" stroke-width="2" stroke-dasharray="4 2.5">'+c.ring+'</g>':'')}
+/* Mystère */
+const STEPS=[
+ {w:"l'oreille",w2:"les oreilles",holes:['<ellipse cx="20" cy="57" rx="9" ry="12"/>','<ellipse cx="80" cy="57" rx="9" ry="12"/>']},
+ {w:"la bouche",holes:['<ellipse cx="50" cy="77" rx="14" ry="8"/>']},
+ {w:"le nez",holes:['<ellipse cx="50" cy="64" rx="8" ry="10"/>']},
+ {w:"l'œil",w2:"les yeux",holes:['<ellipse cx="39" cy="55" rx="10" ry="8"/>','<ellipse cx="61" cy="55" rx="10" ry="8"/>']},
+ {w:"le front",holes:['<ellipse cx="50" cy="41" rx="16" ry="6"/>']},
+ {w:"la joue",w2:"les joues",holes:['<circle cx="29" cy="69" r="8"/>','<circle cx="71" cy="69" r="8"/>']},
+ {w:"le menton",holes:['<ellipse cx="50" cy="89" rx="11" ry="6"/>']},
+ {w:"les cheveux",holes:['<path d="M10 52 Q10 8 50 8 Q90 8 90 52 L86 90 L14 90Z"/>']},
+ {w:"le visage",holes:['<rect x="0" y="0" width="100" height="100"/>']}];
+let mode="m",pi=1,step=-1,stage=0,ci=0,view="one";
+const app=document.getElementById("app");
+function setTab(t){mode=t;["m","c","e"].forEach(k=>document.getElementById("t"+k).classList.toggle("on",k===t));draw()}
+function holesFor(n){return STEPS.slice(0,n+1).map(s=>s.holes.join("")).join("")}
+function drawM(){
+ const p=PEOPLE[pi];const s=STEPS[step];
+ const paper=step>=STEPS.length-1?"":'<svg viewBox="0 0 100 100"><defs><mask id="mk"><rect width="100" height="100" fill="#fff"/><g fill="#000">'+(step>=0?holesFor(step):"")+'</g></mask></defs><rect width="100" height="100" fill="#ead9b4" mask="url(#mk)"/><text x="50" y="62" text-anchor="middle" font-size="44" fill="#b79a5e" font-weight="700" mask="url(#mk)">?</text></svg>';
+ let q,wd="";
+ if(step<0){q="Qu'est-ce que c'est ? Je découvre petit à petit …"}
+ else if(step===STEPS.length-1&&stage===1){q="C'est "+p.name+" !";wd=col(s.w)}
+ else if(stage===0){q="Qu'est-ce que c'est ?";wd='<span style="color:#bbb">?</span>'}
+ else{q="C'est …";wd=col(s.w)+(s.w2?'<small>'+col(s.w2)+'</small>':'')}
+ app.innerHTML='<div class="stage"><div class="facewrap">'+faceSvg(p)+paper+'</div></div><div class="side"><div class="q">'+q+'</div><div class="word">'+wd+'</div><div class="dots">'+STEPS.map((x,i)=>'<span class="dot'+(i<=step?" on":"")+'"></span>').join("")+'</div><div class="btns"><button class="btn" id="nx">'+(step<0?"Commencer":stage===0?"Montrer le mot":step>=STEPS.length-1?"Fin":"Suivant →")+'</button><button class="btn gy" id="pv">←</button><button class="btn sec" id="sp">🔊 Écouter</button><button class="btn gr" id="np">Autre visage</button></div><div class="hint">Leertaste oder Pfeil rechts: weiter · Pfeil links: zurück · R: neu</div></div>';
+ document.getElementById("nx").onclick=next;document.getElementById("pv").onclick=prev;
+ document.getElementById("sp").onclick=()=>{if(step>=0&&stage===1)say(STEPS[step].w+(STEPS[step].w2?", "+STEPS[step].w2:""))};
+ document.getElementById("np").onclick=()=>{pi=(pi+1)%PEOPLE.length;step=-1;stage=0;draw()};
+}
+function next(){
+ if(mode==="m"){
+  if(step<0){step=0;stage=0}
+  else if(stage===0){stage=1;const s=STEPS[step];say(step===STEPS.length-1?"C'est "+PEOPLE[pi].name+" ! "+s.w:s.w+(s.w2?", "+s.w2:""))}
+  else if(step<STEPS.length-1){step++;stage=0}
+  draw();
+ }else if(mode==="c"){ci=(ci+1)%CARDS.length;draw()}
+ else{ci=(ci+1)%CARDS.length;draw()}
+}
+function prev(){
+ if(mode==="m"){if(stage===1)stage=0;else if(step>0){step--;stage=1}else step=-1;draw()}
+ else{ci=(ci+CARDS.length-1)%CARDS.length;draw()}
+}
+function wordOf(c){return c.w2?c.w+" · "+c.w2:c.w}
+function drawC(){
+ if(view==="grid"){
+  app.innerHTML='<div class="ctr"><div class="grid">'+CARDS.map((c,i)=>'<div class="card" data-i="'+i+'">'+pic(c)+'<div class="w">'+col(c.w)+'</div></div>').join("")+'</div><div class="btns"><button class="btn sec" id="vo">Eine Karte groß</button></div></div>';
+  app.querySelectorAll(".card").forEach(e=>e.onclick=()=>{ci=+e.dataset.i;view="one";draw();say(CARDS[ci].w)});
+  document.getElementById("vo").onclick=()=>{view="one";draw()};
+ }else{
+  const c=CARDS[ci];
+  app.innerHTML='<div class="big"><div class="bigpic">'+pic(c)+'</div><div class="bigw">'+col(c.w)+(c.w2?'<small>'+col(c.w2)+'</small>':'')+'</div><div class="btns"><button class="btn gy" id="pv">←</button><button class="btn sec" id="sp">🔊 Écouter</button><button class="btn" id="nx">→</button><button class="btn gr" id="vg">Alle Karten</button></div><div class="hint">'+(ci+1)+' / '+CARDS.length+' · Farben: le blau · la rot · l\' gelb · les grün</div></div>';
+  document.getElementById("nx").onclick=()=>{ci=(ci+1)%CARDS.length;draw();say(CARDS[ci].w)};
+  document.getElementById("pv").onclick=()=>{ci=(ci+CARDS.length-1)%CARDS.length;draw();say(CARDS[ci].w)};
+  document.getElementById("sp").onclick=()=>say(wordOf(c).replace(" · ",", "));
+  document.getElementById("vg").onclick=()=>{view="grid";draw()};
+ }
+}
+function drawE(){
+ const c=CARDS[ci];
+ app.innerHTML='<div class="big"><div class="bigpic" style="width:min(44vh,38vw);height:min(44vh,38vw)">'+pic(c)+'</div><div class="bigw">'+col(c.w)+'</div><div class="btns"><button class="btn" id="e1">1. LP sagt (laut)</button><button class="btn sec" id="e2">2. Klasse laut</button><button class="btn gr" id="e3">3. leise</button><button class="btn gy" id="e4">4. flüstern</button></div><div class="btns"><button class="btn gy" id="pv">←</button><button class="btn" id="nx">Nächstes Wort →</button></div><div class="hint">Echo-Sprechen: Die Lehrperson spricht vor, die Klasse wiederholt laut, leise, im Flüsterton. Die Stimme hilft beim Vorsprechen.</div></div>';
+ document.getElementById("e1").onclick=()=>say(c.w,1);document.getElementById("e2").onclick=()=>say(c.w,1);
+ document.getElementById("e3").onclick=()=>say(c.w,.35);document.getElementById("e4").onclick=()=>say(c.w,.1);
+ document.getElementById("nx").onclick=()=>{ci=(ci+1)%CARDS.length;draw()};
+ document.getElementById("pv").onclick=()=>{ci=(ci+CARDS.length-1)%CARDS.length;draw()};
+}
+function draw(){mode==="m"?drawM():mode==="c"?drawC():drawE()}
+document.getElementById("tm").onclick=()=>setTab("m");document.getElementById("tc").onclick=()=>setTab("c");document.getElementById("te").onclick=()=>setTab("e");
+document.addEventListener("keydown",e=>{if(e.key===" "||e.key==="ArrowRight"){e.preventDefault();next()}else if(e.key==="ArrowLeft")prev();else if(e.key==="r"||e.key==="R"){step=-1;stage=0;draw()}});
+draw();
+</script></body></html>
