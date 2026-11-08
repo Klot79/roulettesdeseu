@@ -108,7 +108,7 @@ let S={students:[],checks:{},weekDone:0};let tab=0,grp="alle",mem=false;
 const $=s=>document.querySelector(s),app=$("#app");
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 function load(){try{const t=localStorage.getItem(KEY);if(t)S=JSON.parse(t)}catch(e){mem=true}
- if(!S.students.length){S.students=Array.from({length:20},(_,i)=>({id:"s"+(i+1),n:"Kind "+(i+1),l:"standard"}))}}
+ if(!S.students.length){S.students=Array.from({length:22},(_,i)=>({id:"s"+(i+1),n:"Kind "+(i+1),l:"standard"}))}}
 function save(){try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){mem=true}}
 const ck=(sid,w,c)=>S.checks[sid+"|"+w+"|"+c]||0;
 function setck(sid,w,c,v){const k=sid+"|"+w+"|"+c;if(v)S.checks[k]=v;else delete S.checks[k]}
